@@ -1,280 +1,297 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Revit & Rhino Plugins — YourBrand</title>
-  <meta name="description" content="Professional automation plugins for Revit and Rhino. Save hours. Work smarter."/>
-  <style>
-    :root{
-      --bg:#0b0f19;
-      --panel:#0f1629;
-      --panel2:#0c1324;
-      --text:#e8ecff;
-      --muted:#a9b2d6;
-      --line:rgba(255,255,255,.08);
-      --glow: rgba(118, 180, 255, .35);
-      --accent1:#6ee7ff;
-      --accent2:#a78bfa;
-      --accent3:#22c55e;
-      --danger:#ff4d6d;
-      --shadow: 0 20px 60px rgba(0,0,0,.55);
-      --radius: 18px;
-      --max: 1100px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:radial-gradient(1200px 600px at 20% -10%, rgba(110,231,255,.18), transparent 50%),
-                               radial-gradient(900px 500px at 100% 10%, rgba(167,139,250,.16), transparent 55%),
-                               radial-gradient(900px 600px at 30% 110%, rgba(34,197,94,.14), transparent 55%),
-                               var(--bg);
-              color:var(--text);font-family:var(--font);}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--max);margin:0 auto;padding:0 18px}
-    .nav{
-      position:sticky;top:0;z-index:50;
-      background:linear-gradient(to bottom, rgba(11,15,25,.92), rgba(11,15,25,.60));
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
-    }
-    .navin{display:flex;align-items:center;justify-content:space-between;height:66px}
-    .logo{display:flex;gap:10px;align-items:center;font-weight:700;letter-spacing:.2px}
-    .dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 0 30px var(--glow)}
-    .navlinks{display:flex;gap:16px;align-items:center;color:var(--muted);font-weight:600}
-    .navlinks a{padding:8px 10px;border-radius:10px}
-    .navlinks a:hover{background:rgba(255,255,255,.05);color:var(--text)}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      gap:10px;padding:12px 16px;border-radius:14px;
-      background:linear-gradient(135deg, rgba(110,231,255,.18), rgba(167,139,250,.18));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      font-weight:800;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn2{
-      display:inline-flex;align-items:center;justify-content:center;
-      gap:10px;padding:12px 16px;border-radius:14px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      color:var(--text);font-weight:800;
-    }
-    .btn2:hover{background:rgba(255,255,255,.09)}
-    .hero{padding:64px 0 22px}
-    .grid2{display:grid;grid-template-columns: 1.15fr .85fr;gap:22px;align-items:stretch}
-    @media (max-width: 920px){.grid2{grid-template-columns:1fr;}}
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
-    .herobox{padding:26px 22px}
-    .pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-    .pill{
-      padding:8px 10px;border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--muted);
-      font-weight:700;font-size:12px;
-    }
-    h1{margin:0 0 10px;font-size:46px;line-height:1.05;letter-spacing:-.6px}
-    @media (max-width: 520px){h1{font-size:38px}}
-    .sub{color:var(--muted);font-size:16px;line-height:1.6;max-width:60ch}
-    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-    @media (max-width: 520px){.stats{grid-template-columns:1fr}}
-    .stat{padding:12px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid var(--line)}
-    .stat b{display:block;font-size:16px}
-    .stat span{color:var(--muted);font-size:12px}
-    .preview{padding:18px;display:flex;flex-direction:column;gap:12px}
-    .mock{
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(180deg, rgba(15,22,41,.9), rgba(12,19,36,.9));
-      overflow:hidden;
-    }
-    .mockbar{display:flex;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);color:var(--muted);font-weight:700;font-size:12px}
-    .c{width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,.14)}
-    .mockbody{padding:14px}
-    .code{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      font-size:12px;line-height:1.6;color:#cfe3ff;
-      background:rgba(0,0,0,.28);
-      border:1px solid rgba(255,255,255,.08);
-      padding:12px;border-radius:14px;white-space:pre-wrap;
-    }
-    section{padding:22px 0}
-    .sectionTitle{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
-    .sectionTitle h2{margin:0;font-size:22px;letter-spacing:-.2px}
-    .sectionTitle p{margin:0;color:var(--muted)}
-    .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    @media (max-width: 920px){.cols3{grid-template-columns:1fr}}
-    .feature{padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-    .feature b{display:block;margin-bottom:6px}
-    .feature p{margin:0;color:var(--muted);line-height:1.6}
-    .products{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    @media (max-width: 920px){.products{grid-template-columns:1fr}}
-    .prod{padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-    .tag{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;
-         border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--muted);font-weight:800}
-    .tag .t{width:8px;height:8px;border-radius:999px;background:linear-gradient(135deg,var(--accent1),var(--accent2))}
-    .prod h3{margin:10px 0 6px;font-size:18px}
-    .prod p{margin:0;color:var(--muted);line-height:1.6}
-    .prodbot{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .pricegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    @media (max-width: 920px){.pricegrid{grid-template-columns:1fr}}
-    .plan{padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);position:relative;overflow:hidden}
-    .plan.pop::before{
-      content:"";position:absolute;inset:-60px -120px auto auto;width:240px;height:240px;
-      background:radial-gradient(circle at 30% 30%, rgba(110,231,255,.35), transparent 55%),
-                 radial-gradient(circle at 60% 60%, rgba(167,139,250,.28), transparent 55%);
-      filter: blur(0px);
-      transform:rotate(12deg);
-    }
-    .plan h3{margin:0 0 6px;font-size:18px}
-    .bigprice{font-size:34px;font-weight:900;letter-spacing:-.6px;margin:8px 0}
-    .ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.7}
-    details{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:14px}
-    summary{cursor:pointer;font-weight:800}
-    .faq{display:grid;gap:12px}
-    footer{padding:26px 0 40px;color:var(--muted)}
-    .foot{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px}
-    .small{font-size:12px;color:var(--muted)}
-    .kbd{font-family:ui-monospace,monospace;font-size:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);padding:2px 6px;border-radius:8px}
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archplug — Revit & Rhino automation plugins</title>
+    <meta name="description" content="Automation plugins for Revit & Rhino. Save hours on tagging, notes, dimensions, and repetitive BIM tasks." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
-<body>
-  <div class="nav">
-    <div class="wrap navin">
-      <div class="logo"><span class="dot"></span> YourBrand <span style="color:var(--muted);font-weight:700">Plugins</span></div>
-      <div class="navlinks">
-        <a href="#features">Features</a>
-        <a href="#plugins">Plugins</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-        <a class="btn" href="#buy">Buy / Download</a>
+  <body>
+    <header class="topbar">
+      <div class="container topbar__inner">
+        <a class="brand" href="#">
+          <span class="brand__mark">A</span>
+          <span class="brand__name">archplug</span>
+        </a>
+
+        <nav class="nav">
+          <a href="#plugins">Plugins</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a class="btn btn--ghost" href="#faq">FAQ</a>
+          <a class="btn btn--primary" href="#pricing">Buy</a>
+        </nav>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <header class="hero">
-    <div class="wrap grid2">
-      <div class="card herobox">
-        <div class="pillrow">
-          <span class="pill">Revit 2026 Ready</span>
-          <span class="pill">Rhino Automation</span>
-          <span class="pill">Instant Download</span>
-          <span class="pill">Studio Licenses</span>
-        </div>
+    <main>
+      <section class="hero">
+        <div class="container hero__grid">
+          <div class="hero__copy">
+            <div class="pill">Automation plugins for Revit & Rhino</div>
+            <h1>
+              Build faster.<br />
+              Tag smarter.<br />
+              Automate the boring parts.
+            </h1>
+            <p class="lead">
+              Archplug helps you finish repetitive BIM tasks in minutes: tagging beams/columns,
+              generating notes, updating dimensions, and more.
+            </p>
 
-        <h1>Automation plugins for <span style="background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;">Revit & Rhino</span>.</h1>
-        <p class="sub">
-          Save hours on repetitive BIM tasks. Clean, fast tools built for real architectural workflows:
-          tagging, dimensions, batch edits, and smart utilities that feel native.
-        </p>
+            <div class="hero__cta">
+              <a class="btn btn--primary btn--lg" href="#pricing">Get the plugins</a>
+              <a class="btn btn--ghost btn--lg" href="#plugins">See plugins</a>
+            </div>
 
-        <div class="cta" id="buy">
-          <a class="btn" href="mailto:you@domain.com?subject=Plugin%20Purchase%20Request">Get the Plugins</a>
-          <a class="btn2" href="#plugins">See Plugins</a>
-          <a class="btn2" href="#pricing">Pricing</a>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><b>Minutes, not hours</b><span>Automate daily BIM pain points</span></div>
-          <div class="stat"><b>Stable scripts</b><span>Built for production projects</span></div>
-          <div class="stat"><b>Fast support</b><span>Updates & bug fixes included</span></div>
-        </div>
-      </div>
-
-      <div class="card preview">
-        <div class="mock">
-          <div class="mockbar">
-            <span class="c"></span><span class="c"></span><span class="c"></span>
-            <span style="margin-left:10px">Demo — “Beam Smart Tagger”</span>
+            <div class="trust">
+              <div class="trust__item">
+                <div class="trust__num">Revit</div>
+                <div class="trust__label">IronPython / RPS compatible</div>
+              </div>
+              <div class="trust__item">
+                <div class="trust__num">Rhino</div>
+                <div class="trust__label">Python automation tools</div>
+              </div>
+              <div class="trust__item">
+                <div class="trust__num">Hours</div>
+                <div class="trust__label">saved every week</div>
+              </div>
+            </div>
           </div>
-          <div class="mockbody">
-            <div class="code">
-Selected: 214 beams
-Skipped: 17 (Type Mark contains "nadvratna greda")
-Placed tags: 197
-Removed duplicates: 12
-Offset: 20% of beam length
 
-Done ✅
+          <div class="hero__visual">
+            <div class="mock">
+              <div class="mock__bar">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="mock__body">
+                <div class="mock__title">Example: Beam Tagging + Notes</div>
+                <div class="mock__row">
+                  <div class="chip">No duplicates</div>
+                  <div class="chip">Underlay-safe</div>
+                  <div class="chip">Fast batch run</div>
+                </div>
+                <div class="mock__code">
+                  <pre><code>// Result
+Beam: "b/h 30x50"
+Comment: "beam 30 x 50 cm"
+Tag offset: 20%</code></pre>
+                </div>
+                <div class="mock__hint">Add screenshots later (assets/) — this is a clean placeholder.</div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div class="mock">
-          <div class="mockbar">
-            <span class="c"></span><span class="c"></span><span class="c"></span>
-            <span style="margin-left:10px">Demo — “Room Auto Dimensions”</span>
+      <section id="plugins" class="section">
+        <div class="container">
+          <div class="section__head">
+            <h2>Plugins</h2>
+            <p>Pick what you need now. Add more later.</p>
           </div>
-          <div class="mockbody">
-            <div class="code">
-All floor plans processed
-Rooms updated: 642
-Kept existing micro-ref lines if unchanged
-Created dimensions using: "DETALJNE KOTE PROGRAMIRANE"
 
-Done ✅
+          <div class="grid cards">
+            <article class="card">
+              <div class="card__icon">🏷️</div>
+              <h3>Smart Tagger</h3>
+              <p>Auto-tag beams, columns, floors, and sections with duplicate protection.</p>
+              <ul class="list">
+                <li>Batch tagging per view</li>
+                <li>Skip by Type Mark rules</li>
+                <li>Offset & alignment controls</li>
+              </ul>
+              <div class="card__foot">
+                <span class="tag">Revit</span>
+                <a class="link" href="#pricing">Buy →</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__icon">🧾</div>
+              <h3>Auto Notes</h3>
+              <p>Write consistent comments and labels from real element parameters.</p>
+              <ul class="list">
+                <li>“beam 30 x 50 cm” formatting</li>
+                <li>Special cases (e.g. ring beams)</li>
+                <li>One-click update</li>
+              </ul>
+              <div class="card__foot">
+                <span class="tag">Revit</span>
+                <a class="link" href="#pricing">Buy →</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__icon">📐</div>
+              <h3>Room Dimension Helper</h3>
+              <p>Generate clean reference micro-lines and dimension rooms reliably.</p>
+              <ul class="list">
+                <li>Minimal detail lines</li>
+                <li>Works across multiple plans</li>
+                <li>Style fallback logic</li>
+              </ul>
+              <div class="card__foot">
+                <span class="tag">Revit</span>
+                <a class="link" href="#pricing">Buy →</a>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__icon">🦏</div>
+              <h3>Rhino Utilities</h3>
+              <p>Small tools that remove friction: match text settings, batch offsets, align helpers.</p>
+              <ul class="list">
+                <li>Preselect-aware scripts</li>
+                <li>Fast workflow commands</li>
+                <li>Clean command-line UX</li>
+              </ul>
+              <div class="card__foot">
+                <span class="tag">Rhino</span>
+                <a class="link" href="#pricing">Buy →</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section section--alt">
+        <div class="container">
+          <div class="section__head">
+            <h2>Why Archplug</h2>
+            <p>Focused on speed, consistency, and zero duplicates.</p>
+          </div>
+
+          <div class="grid features">
+            <div class="feature">
+              <h3>Made for real projects</h3>
+              <p>Handles the annoying edge cases: type-based skipping, existing tags, and updating instead of duplicating.</p>
+            </div>
+            <div class="feature">
+              <h3>Fast batch execution</h3>
+              <p>Optimized collectors and fewer transactions so scripts don’t “load forever”.</p>
+            </div>
+            <div class="feature">
+              <h3>Clean output</h3>
+              <p>Consistent naming, spacing, and formatting — your drawings stay readable.</p>
+            </div>
+            <div class="feature">
+              <h3>Simple install</h3>
+              <p>Drop-in scripts + clear instructions. No heavy dependencies.</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <div class="small">Tip: Replace this demo box with GIF/video screenshots from Revit/Rhino.</div>
-      </div>
-    </div>
-  </header>
+      <section id="pricing" class="section">
+        <div class="container">
+          <div class="section__head">
+            <h2>Pricing</h2>
+            <p>Start small. Upgrade when you’re ready.</p>
+          </div>
 
-  <section id="features">
-    <div class="wrap">
-      <div class="sectionTitle">
-        <h2>Why these plugins?</h2>
-        <p>Built for speed, clarity, and real projects.</p>
-      </div>
+          <div class="grid pricing">
+            <div class="price">
+              <h3>Starter</h3>
+              <div class="price__num">€19</div>
+              <p class="muted">One plugin of your choice</p>
+              <ul class="list">
+                <li>1 plugin</li>
+                <li>Updates for 3 months</li>
+                <li>Email support</li>
+              </ul>
+              <a class="btn btn--primary" href="#faq">Buy Starter</a>
+              <div class="note">Payment integration comes next (Stripe).</div>
+            </div>
 
-      <div class="cols3">
-        <div class="feature">
-          <b>Designed for architects</b>
-          <p>Tools follow how you actually work: views, levels, tags, schedules, quick iterations.</p>
-        </div>
-        <div class="feature">
-          <b>Clean results</b>
-          <p>No messy duplicates, no random styles. Predictable output and safe updates.</p>
-        </div>
-        <div class="feature">
-          <b>Fast installs</b>
-          <p>Simple setup, clear documentation, and a “start in 2 minutes” onboarding.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+            <div class="price price--best">
+              <div class="badge">Most popular</div>
+              <h3>Pro Pack</h3>
+              <div class="price__num">€49</div>
+              <p class="muted">All Revit plugins</p>
+              <ul class="list">
+                <li>Smart Tagger</li>
+                <li>Auto Notes</li>
+                <li>Room Dimension Helper</li>
+              </ul>
+              <a class="btn btn--primary" href="#faq">Buy Pro</a>
+              <div class="note">We’ll connect payments after layout is final.</div>
+            </div>
 
-  <section id="plugins">
-    <div class="wrap">
-      <div class="sectionTitle">
-        <h2>Plugins</h2>
-        <p>Pick what you need, or bundle and save.</p>
-      </div>
-
-      <div class="products">
-        <div class="prod">
-          <span class="tag"><span class="t"></span> Revit</span>
-          <h3>Beam & Column Smart Tagger</h3>
-          <p>Auto-tag framing + columns in plans/sections. Skips filtered types, avoids duplicates, updates existing tags.</p>
-          <div class="prodbot">
-            <a class="btn2" href="#pricing">View pricing</a>
-            <a class="btn2" href="mailto:you@domain.com?subject=Demo%20Request%20-%20Smart%20Tagger">Request demo</a>
+            <div class="price">
+              <h3>Full Suite</h3>
+              <div class="price__num">€79</div>
+              <p class="muted">Revit + Rhino utilities</p>
+              <ul class="list">
+                <li>All Revit plugins</li>
+                <li>All Rhino utilities</li>
+                <li>Priority support</li>
+              </ul>
+              <a class="btn btn--primary" href="#faq">Buy Full</a>
+              <div class="note">Add license keys later if you want.</div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="prod">
-          <span class="tag"><span class="t"></span> Revit</span>
-          <h3>Room Auto Dimensions</h3>
-          <p>Creates clean reference micro-lines and dimensions across all floor plans. Updates only changed rooms.</p>
-          <div class="prodbot">
-            <a class="btn2" href="#pricing">View pricing</a>
-            <a class="btn2" href="mailto:you@domain.com?subject=Demo%20Req
+      <section id="faq" class="section section--alt">
+        <div class="container">
+          <div class="section__head">
+            <h2>FAQ</h2>
+            <p>Short answers now — we can expand later.</p>
+          </div>
+
+          <div class="grid faq">
+            <details class="qa" open>
+              <summary>When will I appear on Google search?</summary>
+              <p>
+                You already verified Search Console + submitted sitemap + requested indexing.
+                It can take some time until Google indexes and ranks your pages.
+              </p>
+            </details>
+
+            <details class="qa">
+              <summary>Do plugins work with Revit 2026?</summary>
+              <p>Yes — this site is built around Revit 2026 workflows (RPS / IronPython).</p>
+            </details>
+
+            <details class="qa">
+              <summary>How will payments work?</summary>
+              <p>
+                Next step is Stripe Checkout (simple “Buy” buttons). We’ll connect it once you confirm the prices and products.
+              </p>
+            </details>
+
+            <details class="qa">
+              <summary>Can you add license keys / downloads?</summary>
+              <p>
+                Yes. We can start simple (manual delivery via email) and later automate with Stripe + download links.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__left">
+          <div class="brand brand--small">
+            <span class="brand__mark">A</span>
+            <span class="brand__name">archplug</span>
+          </div>
+          <p class="muted">Automation plugins for Revit & Rhino.</p>
+        </div>
+
+        <div class="footer__right">
+          <a href="#plugins">Plugins</a>
+          <a href="#pricing">Pricing</a>
+          <a href="mailto:hello@archplug.com">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
